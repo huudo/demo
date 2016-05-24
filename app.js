@@ -17,7 +17,7 @@ $(function () {
 		google.maps.event.addDomListener(map, 'mouseup', plot500);
 		plot500();
 	}
-
+sads
 	google.maps.event.addDomListener(window, 'load', initialize);
 
 	var markers = [];
