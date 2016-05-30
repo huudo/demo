@@ -17,6 +17,7 @@
       }
     </style>
     <body>
+    
     <div id="map"></div>
     <div id="result"></div>
     <script async defer
@@ -39,7 +40,7 @@
       var maxx = ne.lat();
       var maxy = ne.lng();
       var i=0;
-      while( i < 99){
+      while( i < 100){
         var latPoint = Math.random()*(maxx-minx)+minx;
         var lngPoint = Math.random()*(maxy-miny)+miny;
         var newPoint = new google.maps.LatLng(latPoint, lngPoint);
@@ -61,6 +62,7 @@
         } 
             
       }  
+
       $.ajax({
             type: 'POST',
             url: 'process.php',
