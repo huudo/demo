@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 90%;
+        width: 1000px;
+      }
+    </style>
+    <body>
+    <div id="map"></div>
+    <div id="result"></div>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgJu-cnkiF57hU-aDv1Prlb0zMkqY7iCk&libraries=geometry&callback=initMap">
+    </script>
+    <script type="text/javascript">
+
+    var map,circle,marker,marker2=[],point,shop=[];
+    function drawAll(point,radius){
+      if(marker2[0]){
+        for(var i=0; i<100;i++){
+          marker2[i].setMap(null);
+        }
+       marker2 = [];
+      }
+      var ne = circle.getBounds().getNorthEast();
+      var sw = circle.getBounds().getSouthWest(); 
+      var minx = sw.lat();
+      var miny = sw.lng();
+      var maxx = ne.lat();
+      var maxy = ne.lng();
+      var i=0;
+      while( i < 99){
+        var latPoint = Math.random()*(maxx-minx)+minx;
+        var lngPoint = Math.random()*(maxy-miny)+miny;
+        var newPoint = new google.maps.LatLng(latPoint, lngPoint);
+        var centerPoint =  new google.maps.LatLng(point.lat, point.lng);
+        var distance = google.maps.geometry.spherical.computeDistanceBetween(centerPoint,newPoint);
+        if(distance < radius){
+          shop.push({ name:'name'+i,
+                      lat:newPoint.lat(),
+                      lng:newPoint.lng(),
+                      carNum: Math.floor(Math.random()*15+5)
+            });
+          marker2[i] = new google.maps.Marker({
+            position: newPoint,
+            map: map,
+            title: 'Hello World!'
+          });
+          
+          i++;
+        } 
+            
+      }  
+      $.ajax({
+            type: 'POST',
+            url: 'process.php',
+            data: {text1: shop},
+            success: function(response) {
+                $('#result').html(response);
+            }
+        });
+    }
+    function initMap() {
+      // Create the map.
+      var latLng = {lat: 21.036253, lng: 105.816272};
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 14,
+        center: latLng,
+        mapTypeId: google.maps.MapTypeId.TERRAIN
+      });
+
+      // Construct the circle for each value in citymap.
+      // Note: We scale the area of the circle based on the population.
+      circle = new google.maps.Circle({
+        draggable: true,
+        editable:true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35,
+        map: map,
+        center: latLng,
+        radius: 10000
+      });
+      var  point2 = {lat: circle.center.lat(), lng: circle.center.lng()};    
+      drawAll(point2,circle.radius);  // create default points      
+    }
+    </script>
+  </body>
+</html>
