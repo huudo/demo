@@ -13,7 +13,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 foreach ($text1 as $key) {
-	$sql = "INSERT INTO shop (shopName,lat,lng,carNum)
+	$sql = "INSERT INTO shop (shopName,lat,lang,carNum)
 		VALUES ('".$key['name']."', '".$key['lat']."','".$key['lng']."','".$key['carNum']."')";
 	if ($conn->query($sql) === TRUE) {
     	echo "New record created successfully";

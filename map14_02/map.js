@@ -5,7 +5,8 @@ var marker2=[];
 var map;
 var firstPos;
 var cityCircle,marker;
-function myFunction() {   
+function myFunction() {  
+    result =''; 
     var latFirst = document.getElementById("lat").value;
     var lngFirst = document.getElementById("lng").value;
     
@@ -21,9 +22,7 @@ function myFunction() {
     }else{
         showMap(distan);
       }
-    }
-    
-    
+    }       
 }
 function initMap() {
   document.getElementById("lat").value = 21.036253;
@@ -70,7 +69,7 @@ function showMap(distan){
   var flag= false;
   while( i < listFix.length){
     var newLat = parseFloat(listFix[i].lat);
-    var newLng = parseFloat(listFix[i].lng);
+    var newLng = parseFloat(listFix[i].lang);
     var newPoint = {lat: newLat,lng:newLng};
     var pointCheck = new google.maps.LatLng(newLat,newLng);
     var distanceNode = distance(positionNode,pointCheck);
@@ -87,9 +86,13 @@ function showMap(distan){
     i++;
   }
   
-  document.getElementById("countReal").value = sumCar;
+  
   if(i==0){
-    alert("Không có nhà cung cấp nào trong phạm vi!")
+    alert("Không có nhà cung cấp nào trong phạm vi!");
+    result =  'Không có cửa hàng nào trong phạm vi!';
+    document.getElementById("countReal").value = 0;
+    document.getElementById('result').innerHTML= '<b>Danh sách cửa hàng: </b>'+result;
+    document.getElementById("shop").value = 0;
   }else{
     cityCircle = new google.maps.Circle({
       draggable:false,
@@ -104,6 +107,11 @@ function showMap(distan){
     });
     document.getElementById("distance").value = Math.floor(distan);
     document.getElementById("shop").value = i;
+    for (j = 0; j < i; j++ ) {          
+      result += listFix[j].shopName+', ';               
+    };
+    document.getElementById('result').innerHTML= '<b>Danh sách cửa hàng: </b>'+result;
+    document.getElementById("countReal").value = sumCar;
     
   }
   
@@ -116,14 +124,14 @@ function showMap(distan){
       var left = [];
       var right = [];
       var latPivot = parseFloat(arr[0].lat);
-      var lngPivot = parseFloat(arr[0].lng);
+      var lngPivot = parseFloat(arr[0].lang);
       var nodePivot = new google.maps.LatLng(latPivot,lngPivot);
       var pivot = distance(positionNode,nodePivot);
       var nodecenter = arr[0];
       //go through each element in array
       for (var i = 1; i < arr.length; i++) {
           var latNew = parseFloat(arr[i].lat);
-          var lngNew = parseFloat(arr[i].lng);
+          var lngNew = parseFloat(arr[i].lang);
           var newNode = new google.maps.LatLng(latNew,lngNew);
           var distanceNode = distance(positionNode,newNode);
           if (distanceNode < pivot) {

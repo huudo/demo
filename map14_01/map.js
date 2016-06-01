@@ -73,7 +73,7 @@ function showMap(count){
   var i = 0;
   while(sumCar < count){
     var newLat = parseFloat(listFix[i].lat);
-    var newLng = parseFloat(listFix[i].lng);
+    var newLng = parseFloat(listFix[i].lang);
     var newPoint = {lat: newLat,lng:newLng};
     marker2[i] = new google.maps.Marker({
           position: newPoint,
@@ -89,7 +89,7 @@ function showMap(count){
   }
   if(!max){
     var lastLat = parseFloat(listFix[i].lat);
-    var lastLng = parseFloat(listFix[i].lng);
+    var lastLng = parseFloat(listFix[i].lang);
     var lastPoint = {lat: lastLat,lng:lastLng};
     marker2[i] = new google.maps.Marker({
             position: lastPoint,
@@ -101,7 +101,7 @@ function showMap(count){
   document.getElementById("countReal").value = sumCar;
   console.log(i);
   var centerLat = parseFloat(listFix[i].lat);
-  var centerLng = parseFloat(listFix[i].lng);
+  var centerLng = parseFloat(listFix[i].lang);
   var centerPost = new google.maps.LatLng(centerLat,centerLng);
 
   var radiusCenter = distance(positionNode ,centerPost);
@@ -123,32 +123,32 @@ function showMap(count){
   };
   document.getElementById('result').innerHTML= '<b>Danh sách cửa hàng: </b>'+result;
 }
- function sortShop(arr){
-    //if array is empty
-    if (arr.length === 0) {
-    return [];
+function sortShop(arr){
+  //if array is empty
+  if (arr.length === 0) {
+  return [];
+  }
+    var left = [];
+    var right = [];
+    var latPivot = parseFloat(arr[0].lat);
+    var lngPivot = parseFloat(arr[0].lang);
+    var nodePivot = new google.maps.LatLng(latPivot,lngPivot);
+    var pivot = distance(positionNode,nodePivot);
+    var nodecenter = arr[0];
+    //go through each element in array
+    for (var i = 1; i < arr.length; i++) {
+        var latNew = parseFloat(arr[i].lat);
+        var lngNew = parseFloat(arr[i].lang);
+        var newNode = new google.maps.LatLng(latNew,lngNew);
+        var distanceNode = distance(positionNode,newNode);
+        if (distanceNode < pivot) {
+           left.push(arr[i]);
+        } else {
+           right.push(arr[i]);
+        }
     }
-      var left = [];
-      var right = [];
-      var latPivot = parseFloat(arr[0].lat);
-      var lngPivot = parseFloat(arr[0].lng);
-      var nodePivot = new google.maps.LatLng(latPivot,lngPivot);
-      var pivot = distance(positionNode,nodePivot);
-      var nodecenter = arr[0];
-      //go through each element in array
-      for (var i = 1; i < arr.length; i++) {
-          var latNew = parseFloat(arr[i].lat);
-          var lngNew = parseFloat(arr[i].lng);
-          var newNode = new google.maps.LatLng(latNew,lngNew);
-          var distanceNode = distance(positionNode,newNode);
-          if (distanceNode < pivot) {
-             left.push(arr[i]);
-          } else {
-             right.push(arr[i]);
-          }
-      }
-      return $.merge($.merge(sortShop(left), $.makeArray(nodecenter)), sortShop(right));
-    }
+  return $.merge($.merge(sortShop(left), $.makeArray(nodecenter)), sortShop(right));
+}
     
 function distance(point1, point2){
   return google.maps.geometry.spherical.computeDistanceBetween(point1,point2);

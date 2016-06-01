@@ -39,7 +39,7 @@
         <button onclick="myFunction()">Submit</button></br>     
         Số lượng xe thực tế:<input id="countReal" name="count" ></br>   
         Số shop trong bán kính:<input id="shop" name="count" >
-       
+        <div id="result"></div>
     </div>
     <div id="map"></div>
      
